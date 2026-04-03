@@ -3,54 +3,45 @@ name: Deploy to AWS S3
 on:
   push:
     branches:
-      - main          # runs every time you push to main
+      - main
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Check out your code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Set up Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          cache: 'npm'
-
-      # 3. Install dependencies
-      - name: Install dependencies
-        run: npm install
-
-      # 4. Run tests (optional, but good practice)
-      - name: Run tests
-        run: npm test --if-present
-
-      # 5. Build the project
-      - name: Build site
-        run: npm run build
-
-      # 6. Configure AWS credentials from GitHub secrets
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ap-south-1    # change to your region
+          aws-region: ap-south-1
 
-      # 7. Upload build output to S3
+      # --- TEMPORARY DEBUG STEP (delete after fixing) ---
+      - name: Debug - verify credentials and bucket
+        run: |
+          echo "Checking AWS identity..."
+          aws sts get-caller-identity
+          echo "Bucket name is: ${{ secrets.AWS_S3_BUCKET }}"
+          echo "Listing src folder..."
+          ls -la ./src
+
       - name: Deploy to S3
         run: |
-          aws s3 sync ./dist s3://${{ secrets.AWS_S3_BUCKET }} \
+          aws s3 sync ./src s3://${{ secrets.AWS_S3_BUCKET }} \
             --delete \
             --cache-control "max-age=86400"
 
-      # 8. Invalidate CloudFront cache (only if you set up CloudFront)
       - name: Invalidate CloudFront cache
-        if: ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID != '' }}
+        env:
+          CF_DIST_ID: ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }}
+        if: env.CF_DIST_ID != ''
         run: |
           aws cloudfront create-invalidation \
             --distribution-id ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }} \
