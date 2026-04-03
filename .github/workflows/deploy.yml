@@ -5,16 +5,17 @@ on:
     branches:
       - main
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # fixes the deprecation + exit 254
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Check out your code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Configure AWS credentials
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -22,14 +23,12 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-south-1
 
-      # 3. Upload static files to S3
       - name: Deploy to S3
         run: |
           aws s3 sync ./src s3://${{ secrets.AWS_S3_BUCKET }} \
             --delete \
             --cache-control "max-age=86400"
 
-      # 4. Invalidate CloudFront cache
       - name: Invalidate CloudFront cache
         env:
           CF_DIST_ID: ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }}
