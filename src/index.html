@@ -1,152 +1,778 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Cloud Portfolio</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Suraj Pandey — Cloud & DevOps Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #0f172a;
-            color: #e2e8f0;
-        }
+    :root {
+      --bg:       #060b14;
+      --surface:  #0c1422;
+      --card:     #0f1c2e;
+      --cyan:     #00e5ff;
+      --cyan-dim: #00e5ff22;
+      --green:    #39ff9a;
+      --text:     #cdd9e8;
+      --muted:    #5d7a9a;
+      --border:   #1a2d44;
+      --mono:     'Space Mono', monospace;
+      --sans:     'Syne', sans-serif;
+    }
 
-        header {
-            background: #1e293b;
-            padding: 20px;
-            text-align: center;
-        }
+    html { scroll-behavior: smooth; }
 
-        header h1 {
-            margin: 0;
-            color: #38bdf8;
-        }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-size: 16px;
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
 
-        nav {
-            margin-top: 10px;
-        }
+    /* ── grid bg ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(var(--border) 1px, transparent 1px),
+        linear-gradient(90deg, var(--border) 1px, transparent 1px);
+      background-size: 48px 48px;
+      opacity: 0.35;
+      pointer-events: none;
+      z-index: 0;
+    }
 
-        nav a {
-            margin: 0 15px;
-            color: #e2e8f0;
-            text-decoration: none;
-        }
+    /* ── glow orbs ── */
+    .orb {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .orb-1 { width: 500px; height: 500px; background: #00e5ff18; top: -120px; left: -120px; }
+    .orb-2 { width: 400px; height: 400px; background: #39ff9a10; bottom: 10%; right: -100px; }
 
-        nav a:hover {
-            color: #38bdf8;
-        }
+    /* ── layout ── */
+    .wrapper { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 28px; }
 
-        .hero {
-            padding: 80px 20px;
-            text-align: center;
-        }
+    /* ── nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      backdrop-filter: blur(14px);
+      background: #060b14bb;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 18px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 14px;
+      color: var(--cyan);
+      letter-spacing: 0.04em;
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--muted); }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--cyan); }
 
-        .hero h2 {
-            font-size: 2.5rem;
-        }
+    /* ── hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding-top: 80px;
+    }
+    .hero-inner { max-width: 780px; }
 
-        .hero p {
-            margin-top: 10px;
-            color: #94a3b8;
-        }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--green);
+      border: 1px solid #39ff9a33;
+      background: #39ff9a0a;
+      padding: 6px 14px;
+      border-radius: 100px;
+      margin-bottom: 32px;
+      letter-spacing: 0.06em;
+    }
+    .badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.7); }
+    }
 
-        .btn {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            background: #38bdf8;
-            color: #0f172a;
-            border-radius: 5px;
-            text-decoration: none;
-        }
+    .hero h1 {
+      font-family: var(--sans);
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: #e8f4ff;
+    }
+    .hero h1 .accent { color: var(--cyan); }
 
-        .section {
-            padding: 60px 20px;
-            text-align: center;
-        }
+    .hero-sub {
+      margin-top: 24px;
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 560px;
+      line-height: 1.8;
+    }
+    .hero-sub strong { color: var(--text); font-weight: 600; }
 
-        .projects {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 30px;
-        }
+    .hero-cta {
+      margin-top: 40px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      display: inline-block;
+      padding: 13px 28px;
+      background: var(--cyan);
+      color: #060b14;
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .btn-primary:hover { opacity: 0.85; transform: translateY(-2px); }
+    .btn-ghost {
+      display: inline-block;
+      padding: 13px 28px;
+      border: 1px solid var(--border);
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: 0.05em;
+      text-decoration: none;
+      border-radius: 6px;
+      transition: border-color 0.2s, color 0.2s, transform 0.2s;
+    }
+    .btn-ghost:hover { border-color: var(--cyan); color: var(--cyan); transform: translateY(-2px); }
 
-        .card {
-            background: #1e293b;
-            padding: 20px;
-            border-radius: 10px;
-        }
+    .hero-stats {
+      margin-top: 64px;
+      display: flex;
+      gap: 48px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .stat-num {
+      font-family: var(--mono);
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--cyan);
+    }
+    .stat-label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+      font-family: var(--mono);
+    }
 
-        footer {
-            background: #020617;
-            text-align: center;
-            padding: 20px;
-            font-size: 14px;
-            color: #64748b;
-        }
-    </style>
+    /* ── section base ── */
+    section { padding: 100px 0; }
+    .section-tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--cyan);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: var(--sans);
+      font-size: clamp(2rem, 4vw, 2.8rem);
+      font-weight: 800;
+      color: #e8f4ff;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+    }
+    .section-desc {
+      margin-top: 16px;
+      color: var(--muted);
+      max-width: 560px;
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    /* ── about ── */
+    .about-grid {
+      margin-top: 60px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: start;
+    }
+    .about-text p {
+      color: var(--text);
+      line-height: 1.9;
+      font-size: 1rem;
+    }
+    .about-text p + p { margin-top: 18px; }
+    .about-text .highlight { color: var(--cyan); font-weight: 600; }
+
+    .cert-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 28px;
+    }
+    .cert-title {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .cert-item {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .cert-item:last-child { border-bottom: none; }
+    .cert-icon {
+      width: 38px; height: 38px;
+      border-radius: 8px;
+      background: var(--cyan-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+    }
+    .cert-name { font-size: 14px; color: var(--text); font-weight: 600; }
+    .cert-sub { font-family: var(--mono); font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    /* ── skills ── */
+    .skills-grid {
+      margin-top: 60px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .skill-group {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 22px;
+      transition: border-color 0.25s, transform 0.25s;
+    }
+    .skill-group:hover { border-color: var(--cyan); transform: translateY(-4px); }
+    .skill-group-name {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--cyan);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .skill-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+    .skill-tag {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text);
+      background: #ffffff08;
+      border: 1px solid var(--border);
+      padding: 4px 10px;
+      border-radius: 4px;
+    }
+
+    /* ── projects ── */
+    .projects-grid {
+      margin-top: 60px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+    .project-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.25s, transform 0.25s;
+      cursor: default;
+    }
+    .project-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--cyan), var(--green));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    .project-card:hover { border-color: #1a3a55; transform: translateY(-6px); }
+    .project-card:hover::before { opacity: 1; }
+
+    .project-num {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      margin-bottom: 18px;
+    }
+    .project-title {
+      font-family: var(--sans);
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #e8f4ff;
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+    .project-desc {
+      font-size: 14px;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+    .project-desc li { margin-left: 16px; margin-top: 6px; }
+    .project-desc li::marker { color: var(--cyan); }
+    .project-stack {
+      margin-top: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .stack-pill {
+      font-family: var(--mono);
+      font-size: 10px;
+      color: var(--cyan);
+      background: var(--cyan-dim);
+      border: 1px solid #00e5ff30;
+      padding: 3px 10px;
+      border-radius: 100px;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── contact ── */
+    .contact-wrap {
+      margin-top: 60px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at 50% 0%, #00e5ff0a 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .contact-eyebrow {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--green);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+    .contact-headline {
+      font-family: var(--sans);
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 800;
+      color: #e8f4ff;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      max-width: 600px;
+      margin: 0 auto 16px;
+    }
+    .contact-sub {
+      color: var(--muted);
+      font-size: 15px;
+      max-width: 480px;
+      margin: 0 auto 36px;
+    }
+    .contact-links {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 40px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      transition: color 0.2s;
+    }
+    .contact-link:hover { color: var(--cyan); }
+    .contact-link span { opacity: 0.5; }
+
+    /* ── footer ── */
+    footer {
+      padding: 28px;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ── divider ── */
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+      margin: 0;
+    }
+
+    /* ── scroll reveal ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.65s ease, transform 0.65s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: none;
+    }
+
+    /* ── responsive ── */
+    @media (max-width: 680px) {
+      .about-grid { grid-template-columns: 1fr; }
+      .contact-wrap { padding: 36px 24px; }
+      .hero-stats { gap: 28px; }
+      .nav-links { display: none; }
+    }
+  </style>
 </head>
 <body>
 
-<header>
-    <h1>Suraj Pandey</h1>
-    <nav>
-        <a href="#about">About</a>
-        <a href="#projects">Projects</a>
-        <a href="#contact">Contact</a>
-    </nav>
-</header>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
 
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">suraj<span>.pandey</span></a>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- HERO -->
 <section class="hero">
-    <h2>Cloud & DevOps Engineer</h2>
-    <p>Building scalable infrastructure using AWS, Docker and CI/CD pipelines.</p>
-    <a href="#projects" class="btn">View Projects</a>
-</section>
-
-<section id="about" class="section">
-    <h2>About Me</h2>
-    <p>
-        AWS Certified Solutions Architect (SAA-C03) and final-year BCA student with hands-on experience in AWS, Docker,
-        and basic Kubernetes. Built projects using Terraform, serverless architecture, and CI/CD pipelines. Seeking an
-        entry-level Cloud/DevOps Engineer role to apply practical skills and continue learning in real-world environments.
-    </p>
-</section>
-
-<section id="projects" class="section">
-    <h2>Projects</h2>
-    <div class="projects">
-        <div class="card">
-            <h3>Serverless Three-Tier Application</h3>
-            <p>Built a serverless application using AWS Lambda, API Gateway, DynamoDB, and S3.</p>
-            <p>Created REST APIs using API Gateway to trigger Lambda functions.</p>
-            <p>Stored and retrieved application data using DynamoDB.</p>
+  <div class="wrapper">
+    <div class="hero-inner">
+      <div class="badge">Available for opportunities</div>
+      <h1>
+        I build cloud<br>
+        infra that <span class="accent">ships.</span>
+      </h1>
+      <p class="hero-sub">
+        <strong>Cloud & DevOps Engineer</strong> turning manual bottlenecks into automated pipelines.
+        I architect on AWS, containerize with Docker, and treat infrastructure as what it is — code.
+      </p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn-primary">See my work</a>
+        <a href="#contact" class="btn-ghost">Get in touch</a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">3+</div>
+          <div class="stat-label">Cloud projects shipped</div>
         </div>
-
-        <div class="card">
-            <h3>AWS Static Website</h3>
-            <p>Hosted a scalable static website using S3 and CloudFront.</p>
+        <div>
+          <div class="stat-num">SAA-C03</div>
+          <div class="stat-label">AWS Certified</div>
         </div>
-
-        <div class="card">
-            <h3>Dockerized App</h3>
-            <p>Containerized multi-service application using Docker Compose.</p>
+        <div>
+          <div class="stat-num">∞</div>
+          <div class="stat-label">Things left to learn</div>
         </div>
+      </div>
     </div>
+  </div>
 </section>
 
-<section id="contact" class="section">
-    <h2>Contact</h2>
-    <p>Email: pandeysuraj7020@gmail.com</p>
-    <p>GitHub: github.com/Surraj70</p>
-    <p>Linkedin: linkedin.com/in/surraj70</p>
+<div class="divider"></div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="wrapper">
+    <p class="section-tag reveal">// about me</p>
+    <h2 class="section-title reveal">Not just another<br>cloud resume.</h2>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>
+          I'm a final-year BCA student and <span class="highlight">AWS Certified Solutions Architect</span>
+          who got tired of clicking through consoles and started writing Terraform instead.
+          My learning curve isn't academic — it's made of broken pipelines, late-night debug sessions,
+          and the satisfaction of watching infrastructure provision itself.
+        </p>
+        <p>
+          I care about the <span class="highlight">gap between "it works on my machine" and "it runs in production."</span>
+          That's the gap I close — with CI/CD pipelines, containerisation, and infra that treats repeatability as a first-class requirement.
+        </p>
+        <p>
+          Currently seeking an entry-level Cloud or DevOps role where I can contribute from day one
+          and grow alongside a team that takes reliability seriously.
+        </p>
+      </div>
+      <div class="reveal">
+        <div class="cert-box">
+          <div class="cert-title">// credentials & tools</div>
+          <div class="cert-item">
+            <div class="cert-icon">☁️</div>
+            <div>
+              <div class="cert-name">AWS SAA-C03</div>
+              <div class="cert-sub">Solutions Architect Associate</div>
+            </div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-icon">🐳</div>
+            <div>
+              <div class="cert-name">Docker & Compose</div>
+              <div class="cert-sub">Containerisation & orchestration</div>
+            </div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-icon">⚙️</div>
+            <div>
+              <div class="cert-name">Terraform</div>
+              <div class="cert-sub">Infrastructure as code</div>
+            </div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-icon">🔄</div>
+            <div>
+              <div class="cert-name">GitHub Actions</div>
+              <div class="cert-sub">CI/CD automation</div>
+            </div>
+          </div>
+          <div class="cert-item">
+            <div class="cert-icon">☸️</div>
+            <div>
+              <div class="cert-name">Kubernetes</div>
+              <div class="cert-sub">Basic cluster management</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="wrapper">
+    <p class="section-tag reveal">// tech stack</p>
+    <h2 class="section-title reveal">Tools I reach for<br>when things get real.</h2>
+    <div class="skills-grid">
+      <div class="skill-group reveal">
+        <div class="skill-group-name">Cloud</div>
+        <div class="skill-tags">
+          <span class="skill-tag">AWS S3</span>
+          <span class="skill-tag">EC2</span>
+          <span class="skill-tag">Lambda</span>
+          <span class="skill-tag">CloudFront</span>
+          <span class="skill-tag">API Gateway</span>
+          <span class="skill-tag">DynamoDB</span>
+          <span class="skill-tag">IAM</span>
+          <span class="skill-tag">VPC</span>
+        </div>
+      </div>
+      <div class="skill-group reveal">
+        <div class="skill-group-name">DevOps</div>
+        <div class="skill-tags">
+          <span class="skill-tag">GitHub Actions</span>
+          <span class="skill-tag">Docker</span>
+          <span class="skill-tag">Docker Compose</span>
+          <span class="skill-tag">Terraform</span>
+          <span class="skill-tag">Kubernetes</span>
+          <span class="skill-tag">Linux</span>
+        </div>
+      </div>
+      <div class="skill-group reveal">
+        <div class="skill-group-name">Dev</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">Bash</span>
+          <span class="skill-tag">HTML/CSS</span>
+          <span class="skill-tag">Git</span>
+          <span class="skill-tag">REST APIs</span>
+        </div>
+      </div>
+      <div class="skill-group reveal">
+        <div class="skill-group-name">Concepts</div>
+        <div class="skill-tags">
+          <span class="skill-tag">Serverless</span>
+          <span class="skill-tag">IaC</span>
+          <span class="skill-tag">CI/CD</span>
+          <span class="skill-tag">High Availability</span>
+          <span class="skill-tag">Cost Optimisation</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="wrapper">
+    <p class="section-tag reveal">// projects</p>
+    <h2 class="section-title reveal">Things I've built.<br>Not just things I've read about.</h2>
+    <p class="section-desc reveal">Each project started with a real problem and ended with something deployed — not just diagrammed.</p>
+    <div class="projects-grid">
+
+      <div class="project-card reveal">
+        <div class="project-num">01 — Serverless</div>
+        <div class="project-title">Three-Tier Serverless Application</div>
+        <ul class="project-desc">
+          <li>Built a fully serverless backend that scales to zero — and back up — without any server management</li>
+          <li>Designed REST APIs on API Gateway routing traffic to Lambda functions handling business logic</li>
+          <li>Persisted application data in DynamoDB with single-digit millisecond read latency</li>
+          <li>Served static assets from S3 to keep the frontend fast and cheap</li>
+        </ul>
+        <div class="project-stack">
+          <span class="stack-pill">Lambda</span>
+          <span class="stack-pill">API Gateway</span>
+          <span class="stack-pill">DynamoDB</span>
+          <span class="stack-pill">S3</span>
+          <span class="stack-pill">IAM</span>
+        </div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-num">02 — CI/CD</div>
+        <div class="project-title">Automated Deployment Pipeline</div>
+        <ul class="project-desc">
+          <li>Built a CI/CD pipeline where a single <code style="color:var(--cyan);font-size:12px">git push</code> triggers a full build, test, and deploy cycle</li>
+          <li>Files sync to S3 automatically, CloudFront cache invalidated on every release</li>
+          <li>Zero manual steps from code to production — the way deployment should work</li>
+          <li>AWS credentials managed securely via GitHub Secrets, never hardcoded</li>
+        </ul>
+        <div class="project-stack">
+          <span class="stack-pill">GitHub Actions</span>
+          <span class="stack-pill">S3</span>
+          <span class="stack-pill">CloudFront</span>
+          <span class="stack-pill">IAM</span>
+        </div>
+      </div>
+
+      <div class="project-card reveal">
+        <div class="project-num">03 — Containers</div>
+        <div class="project-title">Dockerized Multi-Service App</div>
+        <ul class="project-desc">
+          <li>Containerised a multi-service application so it runs identically in dev, staging, and production</li>
+          <li>Used Docker Compose to orchestrate services, networking, and volumes in a single config file</li>
+          <li>Eliminated "works on my machine" forever — the container is the environment</li>
+        </ul>
+        <div class="project-stack">
+          <span class="stack-pill">Docker</span>
+          <span class="stack-pill">Docker Compose</span>
+          <span class="stack-pill">Linux</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="wrapper">
+    <div class="contact-wrap reveal">
+      <p class="contact-eyebrow">// open to work</p>
+      <h2 class="contact-headline">Let's build something that doesn't break at 3am.</h2>
+      <p class="contact-sub">
+        I'm actively looking for Cloud or DevOps roles. If you want someone who ships,
+        documents, and takes on-call seriously — let's talk.
+      </p>
+      <a href="mailto:pandeysuraj7020@gmail.com" class="btn-primary">pandeysuraj7020@gmail.com</a>
+      <div class="contact-links">
+        <a href="https://github.com/Surraj70" target="_blank" class="contact-link">
+          <span>//</span> github.com/Surraj70
+        </a>
+        <a href="https://linkedin.com/in/surraj70" target="_blank" class="contact-link">
+          <span>//</span> linkedin.com/in/surraj70
+        </a>
+      </div>
+    </div>
+  </div>
 </section>
 
 <footer>
-    <p>© 2026 Suraj Pandey | Built for AWS Deployment</p>
+  <p>Built & deployed on AWS — Suraj Pandey © 2026</p>
 </footer>
 
+<script>
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+
 </body>
-</html><p>Deployed automatically!</p>
+</html>
