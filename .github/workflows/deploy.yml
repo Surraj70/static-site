@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # fixes the deprecation + exit 254
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   deploy:
@@ -22,6 +22,15 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-south-1
+
+      # --- TEMPORARY DEBUG STEP (delete after fixing) ---
+      - name: Debug - verify credentials and bucket
+        run: |
+          echo "Checking AWS identity..."
+          aws sts get-caller-identity
+          echo "Bucket name is: ${{ secrets.AWS_S3_BUCKET }}"
+          echo "Listing src folder..."
+          ls -la ./src
 
       - name: Deploy to S3
         run: |
