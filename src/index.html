@@ -715,12 +715,17 @@
       </div>
 
       <div class="project-card reveal">
-        <div class="project-num">03 — Containers</div>
-        <div class="project-title">Dockerized Multi-Service App</div>
+        <div class="project-num">03 — Containers & Monitoring</div>
+        <div class="project-title">Containerized Application Monitoring System</div>
         <ul class="project-desc">
-          <li>Containerised a multi-service application so it runs identically in dev, staging, and production</li>
-          <li>Used Docker Compose to orchestrate services, networking, and volumes in a single config file</li>
-          <li>Eliminated "works on my machine" forever — the container is the environment</li>
+          <li>Orchestrated 6 containers — Node.js API, Prometheus, Grafana, Node       Exporter, cAdvisor, Alertmanager — using
+            Docker Compose on a single EC2 instance</li>
+          <li>Configured Prometheus with a 15-second scrape interval, collecting 20+ metrics across host, container, and
+            application layers</li>
+          <li>Built Grafana dashboards with 8 panels tracking CPU, memory, request  rate, and response time; set PromQL
+            alerts at 80% CPU and 85% memory thresholds</li>
+          <li>Instrumented Node.js app using prom-client to expose 4 custom metrics — request count and duration across
+            method, route, and status code labels — with alerts routed to Slack via Alertmanager webhooks</li>
         </ul>
         <div class="project-stack">
           <span class="stack-pill">Docker</span>
