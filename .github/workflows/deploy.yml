@@ -23,15 +23,6 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ap-south-1
 
-      # --- TEMPORARY DEBUG STEP (delete after fixing) ---
-      - name: Debug - verify credentials and bucket
-        run: |
-          echo "Checking AWS identity..."
-          aws sts get-caller-identity
-          echo "Bucket name is: ${{ secrets.AWS_S3_BUCKET }}"
-          echo "Listing src folder..."
-          ls -la ./src
-
       - name: Deploy to S3
         run: |
           aws s3 sync ./src s3://${{ secrets.AWS_S3_BUCKET }} \
